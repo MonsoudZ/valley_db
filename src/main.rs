@@ -18,10 +18,10 @@ fn main() {
             insert(&mut mapping)
         }
         else if user_action == "delete" {
-            delete_from_value(&mut mapping)
+            delete_entry_by_key(&mut mapping)
         }
         else if user_action == "get" {
-            get_value_for(& mapping)
+            get_value(& mapping)
         }
         else if user_action == "exit" {
             break;
@@ -32,12 +32,12 @@ fn main() {
     }
 }
 
-fn insert(i: &mut HashMap<String, String>) {
-    i.insert(get_key(),get_value());
+fn insert(storage: &mut HashMap<String, String>) {
+    storage.insert(input_key(),input_value());
 }
 
-fn delete_from_value(i: &mut HashMap<String, String>) {
-    match i.remove(&(get_key())) {
+fn delete_entry_by_key(storage: &mut HashMap<String, String>) {
+    match storage.remove(&(input_key())) {
         Some(value) => {
             println!("Value: {value} was deleted");
         }
@@ -45,7 +45,7 @@ fn delete_from_value(i: &mut HashMap<String, String>) {
     }
 }
 
-fn get_value_for(i: &HashMap<String, String>) {
+fn get_value(storage: &HashMap<String, String>) {
     println!("Input key name");
 
     let mut user_key = String::new();
@@ -54,7 +54,7 @@ fn get_value_for(i: &HashMap<String, String>) {
         .expect("Failed to read line");
     let user_key = user_key.trim();
 
-    match i.get(user_key) {
+    match storage.get(user_key) {
         Some(value) => {
             println!("Value: {value}");
         }
@@ -62,7 +62,7 @@ fn get_value_for(i: &HashMap<String, String>) {
     }
 }
 
-fn get_key() -> String {
+fn input_key() -> String {
     loop {
         println!("Input key name");
         let mut key = String::new();
@@ -80,7 +80,7 @@ fn get_key() -> String {
         }
     }
 }
-fn get_value() -> String {
+fn input_value() -> String {
     loop {
         println!("Input Value");
         let mut value = String::new();
