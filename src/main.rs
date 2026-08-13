@@ -33,7 +33,12 @@ fn main() {
 }
 
 fn insert(storage: &mut HashMap<String, String>) {
-    storage.insert(input_key(),input_value());
+    match storage.insert(input_key(),input_value()) {
+            Some(value) => {
+                println!("existing key was updated");
+            }
+            None => println!("brand-new key."),
+    };
 }
 
 fn delete_entry_by_key(storage: &mut HashMap<String, String>) {
