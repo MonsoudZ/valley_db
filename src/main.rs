@@ -19,7 +19,12 @@ fn main() {
         if user_action == "insert" {
             let key = input_key();
             let value = input_value();
-            insert(&mut mapping, key, value)
+            match insert(&mut mapping, key, value) {
+                Some(value) => {
+                    println!(" Old Value was replaced with new Value");
+                }
+                None => println!("New record was created"),
+            }
         }
         else if user_action == "delete" {
             let key = input_key();
@@ -48,13 +53,8 @@ fn main() {
     }
 }
 
-fn insert(storage: &mut HashMap<String, String>, key: String, value: String) {
-    match storage.insert(key,value) {
-            Some(value) => {
-                println!("existing key was updated");
-            }
-            None => println!("brand-new key."),
-    };
+fn insert(storage: &mut HashMap<String, String>, key: String, value: String) -> Option<String> {
+    storage.insert(key,value)
 }
 
 fn delete_entry_by_key(storage: &mut HashMap<String, String>, key: String) -> Option<String> {
