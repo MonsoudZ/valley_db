@@ -1,3 +1,5 @@
+use std::arch::aarch64::vaba_s8;
+use std::collections::hash_map::Keys;
 use std::io;
 use std::collections::HashMap;
 
@@ -15,13 +17,27 @@ fn main() {
         let user_action = user_action.trim().to_lowercase();
 
         if user_action == "insert" {
-            insert(&mut mapping)
+            let key = input_key();
+            let value = input_value();
+            insert(&mut mapping, key, value)
         }
         else if user_action == "delete" {
-            delete_entry_by_key(&mut mapping)
+            let key = input_key();
+            match delete_entry_by_key(&mut mapping,key) {
+                Some(value) => {
+                    println!("Value: {value} was deleted");
+                }
+                None => println!("No key found, try again."),
+            }
         }
         else if user_action == "get" {
-            get_value(& mapping)
+            let get_key = input_key();
+            match get_value(&mapping,get_key) {
+                Some(value) => {
+                    println!("Value: {value} was found");
+                }
+                None => println!("No key found, try again."),
+            }
         }
         else if user_action == "exit" {
             break;
@@ -32,8 +48,8 @@ fn main() {
     }
 }
 
-fn insert(storage: &mut HashMap<String, String>) {
-    match storage.insert(input_key(),input_value()) {
+fn insert(storage: &mut HashMap<String, String>, key: String, value: String) {
+    match storage.insert(key,value) {
             Some(value) => {
                 println!("existing key was updated");
             }
@@ -41,30 +57,12 @@ fn insert(storage: &mut HashMap<String, String>) {
     };
 }
 
-fn delete_entry_by_key(storage: &mut HashMap<String, String>) {
-    match storage.remove(&(input_key())) {
-        Some(value) => {
-            println!("Value: {value} was deleted");
-        }
-        None => println!("No key found, try again."),
-    }
+fn delete_entry_by_key(storage: &mut HashMap<String, String>, key: String) -> Option<String> {
+     storage.remove(&(key))
 }
 
-fn get_value(storage: &HashMap<String, String>) {
-    println!("Input key name");
-
-    let mut user_key = String::new();
-    io::stdin()
-        .read_line(&mut user_key)
-        .expect("Failed to read line");
-    let user_key = user_key.trim();
-
-    match storage.get(user_key) {
-        Some(value) => {
-            println!("Value: {value}");
-        }
-        None => println!("No key '{user_key}' found, try again."),
-    }
+fn get_value(storage: &HashMap<String, String>, key: String) -> Option<&String> {
+     storage.get(&key)
 }
 
 fn input_key() -> String {
