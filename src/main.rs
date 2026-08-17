@@ -1,5 +1,3 @@
-use std::arch::aarch64::vaba_s8;
-use std::collections::hash_map::Keys;
 use std::io;
 use std::collections::HashMap;
 
@@ -58,7 +56,7 @@ fn insert(storage: &mut HashMap<String, String>, key: String, value: String) -> 
 }
 
 fn delete_entry_by_key(storage: &mut HashMap<String, String>, key: String) -> Option<String> {
-     storage.remove(&(key))
+    storage.remove(&(key))
 }
 
 fn get_value(storage: &HashMap<String, String>, key: String) -> Option<&String> {
@@ -102,4 +100,22 @@ fn input_value() -> String {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
 
+    #[test]
+    fn test_insert() {
+        let mut storage = HashMap::new();
+        let key = String::new();
+        let value = String::new();
+
+        insert(&mut storage,key,value);
+
+        storage.get(&key).unwrap();
+        assert_eq!(storage.get(&key).unwrap(), &value);
+
+        assert_eq!(key, value);
+
+    }
+}
