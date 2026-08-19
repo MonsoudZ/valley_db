@@ -107,15 +107,8 @@ mod tests {
     #[test]
     fn test_insert() {
         let mut storage = HashMap::new();
-        let key = String::new();
-        let value = String::new();
 
-        insert(&mut storage,key,value);
+        insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
 
-        storage.get(&key).unwrap();
-        assert_eq!(storage.get(&key).unwrap(), &value);
-
-        assert_eq!(key, value);
-
+        assert_eq!(storage.get("cheese_type"), Some(&String::from("blue cheese")));
     }
-}
