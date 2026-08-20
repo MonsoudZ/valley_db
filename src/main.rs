@@ -1,6 +1,7 @@
 use std::io;
 use std::collections::HashMap;
 
+
 fn main() {
     let mut mapping = HashMap::new();
 
@@ -112,3 +113,13 @@ mod tests {
 
         assert_eq!(storage.get("cheese_type"), Some(&String::from("blue cheese")));
     }
+
+    #[test]
+    fn test_delete_entry_by_key() {
+        let mut storage = HashMap::new();
+        insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
+        storage.remove(&String::from("cheese_type"));
+
+        assert_eq!(storage.get("cheese_type"), None);
+    }
+}
