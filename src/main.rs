@@ -118,7 +118,7 @@ mod tests {
     fn test_delete_entry_by_key() {
         let mut storage = HashMap::new();
         insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
-        storage.remove(("cheese_type"));
+        delete_entry_by_key(&mut storage, String::from("cheese_type"));
 
         assert_eq!(storage.get("cheese_type"), None);
     }
@@ -126,19 +126,29 @@ mod tests {
     #[test]
     fn test_get_missing_key() {
         let mut storage = HashMap::new();
-
         insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
+        let result = get_value(&mut storage, String::from("toys"));
 
-        assert_eq!(storage.get("pasta"), None);
+        assert_eq!(result, None);
+    }
+
+    #[test]
+    fn test_get_key() {
+        let mut storage = HashMap::new();
+        insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
+        let result = get_value(&storage, String::from("cheese_type"));
+
+        assert_eq!(result, Some(&String::from("blue cheese")));
     }
 
     #[test]
     fn test_insert_overwrites_existing_key() {
-        // 1. Make a new HashMap
-        // 2. Insert "cheese_type" → "blue cheese"
-        // 3. Insert "cheese_type" → "cheddar" AGAIN — but this time,
-        //    capture what insert returns:  let old = storage.insert(...);
-        // 4. assert_eq! that `old` is Some(String::from("blue cheese"))
-        // 5. assert_eq! that storage.get("cheese_type") is the cheddar value
+        let mut storage = HashMap::new();
+        let old = insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
+        let new = insert(&mut storage, String::from("cheese_type"), String::from("cheddar cheese"));
+
+        assert_eq!(old, None);
+        assert_eq!(new, Some(String::from("blue cheese")));
+        assert_eq!(storage.get("cheese_type"), Some(&String::from("cheddar cheese")));
     }
 }
