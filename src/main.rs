@@ -20,9 +20,9 @@ fn main() {
             let value = input_value();
             match insert(&mut mapping, key, value) {
                 Some(value) => {
-                    println!(" Old Value was replaced with new Value");
+                    println!(" Old Value was replaced {value} with new Value");
                 }
-                None => println!("New record was created"),
+                None => println!("New record for was created"),
             }
         }
         else if user_action == "delete" {
@@ -150,5 +150,25 @@ mod tests {
         assert_eq!(old, None);
         assert_eq!(new, Some(String::from("blue cheese")));
         assert_eq!(storage.get("cheese_type"), Some(&String::from("cheddar cheese")));
+    }
+
+    #[test]
+    fn test_insert_multiple_key() {
+        let mut storage = HashMap::new();
+        insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
+        insert(&mut storage, String::from("sports"), String::from("soccer"));
+
+
+        assert_eq!(storage.get("cheese_type"), Some(&String::from("blue cheese")));
+        assert_eq!(storage.get("sports"), Some(&String::from("soccer")));
+    }
+
+    #[test]
+    fn test_delete_missing_key() {
+        let mut storage = HashMap::new();
+        insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
+        let result = delete_entry_by_key(&mut storage, String::from("sports"));
+
+        assert_eq!(result,None);
     }
 }
