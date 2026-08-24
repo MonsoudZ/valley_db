@@ -1,6 +1,5 @@
-use std::io;
 use std::collections::HashMap;
-
+use std::io;
 
 fn main() {
     let mut mapping = HashMap::new();
@@ -24,36 +23,32 @@ fn main() {
                 }
                 None => println!("New record for was created"),
             }
-        }
-        else if user_action == "delete" {
+        } else if user_action == "delete" {
             let key = input_key();
-            match delete_entry_by_key(&mut mapping,key) {
+            match delete_entry_by_key(&mut mapping, key) {
                 Some(value) => {
                     println!("Value: {value} was deleted");
                 }
                 None => println!("No key found, try again."),
             }
-        }
-        else if user_action == "get" {
+        } else if user_action == "get" {
             let get_key = input_key();
-            match get_value(&mapping,get_key) {
+            match get_value(&mapping, get_key) {
                 Some(value) => {
                     println!("Value: {value} was found");
                 }
                 None => println!("No key found, try again."),
             }
-        }
-        else if user_action == "exit" {
+        } else if user_action == "exit" {
             break;
-        }
-        else {
+        } else {
             println!("Unknown action");
         }
     }
 }
 
 fn insert(storage: &mut HashMap<String, String>, key: String, value: String) -> Option<String> {
-    storage.insert(key,value)
+    storage.insert(key, value)
 }
 
 fn delete_entry_by_key(storage: &mut HashMap<String, String>, key: String) -> Option<String> {
@@ -61,7 +56,7 @@ fn delete_entry_by_key(storage: &mut HashMap<String, String>, key: String) -> Op
 }
 
 fn get_value(storage: &HashMap<String, String>, key: String) -> Option<&String> {
-     storage.get(&key)
+    storage.get(&key)
 }
 
 fn input_key() -> String {
@@ -91,7 +86,7 @@ fn input_value() -> String {
             .read_line(&mut value)
             .expect("Failed to read line");
 
-         let cleaned_value = value.trim();
+        let cleaned_value = value.trim();
 
         if cleaned_value.is_empty() {
             println!("empty value, try again.");
@@ -109,15 +104,26 @@ mod tests {
     fn test_insert() {
         let mut storage = HashMap::new();
 
-        insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
+        insert(
+            &mut storage,
+            String::from("cheese_type"),
+            String::from("blue cheese"),
+        );
 
-        assert_eq!(storage.get("cheese_type"), Some(&String::from("blue cheese")));
+        assert_eq!(
+            storage.get("cheese_type"),
+            Some(&String::from("blue cheese"))
+        );
     }
 
     #[test]
     fn test_delete_entry_by_key() {
         let mut storage = HashMap::new();
-        insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
+        insert(
+            &mut storage,
+            String::from("cheese_type"),
+            String::from("blue cheese"),
+        );
         delete_entry_by_key(&mut storage, String::from("cheese_type"));
 
         assert_eq!(storage.get("cheese_type"), None);
@@ -126,7 +132,11 @@ mod tests {
     #[test]
     fn test_get_missing_key() {
         let mut storage = HashMap::new();
-        insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
+        insert(
+            &mut storage,
+            String::from("cheese_type"),
+            String::from("blue cheese"),
+        );
         let result = get_value(&storage, String::from("toys"));
 
         assert_eq!(result, None);
@@ -135,7 +145,11 @@ mod tests {
     #[test]
     fn test_get_key() {
         let mut storage = HashMap::new();
-        insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
+        insert(
+            &mut storage,
+            String::from("cheese_type"),
+            String::from("blue cheese"),
+        );
         let result = get_value(&storage, String::from("cheese_type"));
 
         assert_eq!(result, Some(&String::from("blue cheese")));
@@ -145,31 +159,52 @@ mod tests {
 
     fn test_insert_overwrites_existing_key() {
         let mut storage = HashMap::new();
-        let old = insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
-        let new = insert(&mut storage, String::from("cheese_type"), String::from("cheddar cheese"));
+        let old = insert(
+            &mut storage,
+            String::from("cheese_type"),
+            String::from("blue cheese"),
+        );
+        let new = insert(
+            &mut storage,
+            String::from("cheese_type"),
+            String::from("cheddar cheese"),
+        );
 
         assert_eq!(old, None);
         assert_eq!(new, Some(String::from("blue cheese")));
-        assert_eq!(storage.get("cheese_type"), Some(&String::from("cheddar cheese")));
+        assert_eq!(
+            storage.get("cheese_type"),
+            Some(&String::from("cheddar cheese"))
+        );
     }
 
     #[test]
     fn test_insert_multiple_key() {
         let mut storage = HashMap::new();
-        insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
+        insert(
+            &mut storage,
+            String::from("cheese_type"),
+            String::from("blue cheese"),
+        );
         insert(&mut storage, String::from("sports"), String::from("soccer"));
 
-
-        assert_eq!(storage.get("cheese_type"), Some(&String::from("blue cheese")));
+        assert_eq!(
+            storage.get("cheese_type"),
+            Some(&String::from("blue cheese"))
+        );
         assert_eq!(storage.get("sports"), Some(&String::from("soccer")));
     }
 
     #[test]
     fn test_delete_missing_key() {
         let mut storage = HashMap::new();
-        insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
+        insert(
+            &mut storage,
+            String::from("cheese_type"),
+            String::from("blue cheese"),
+        );
         let result = delete_entry_by_key(&mut storage, String::from("sports"));
 
-        assert_eq!(result,None);
+        assert_eq!(result, None);
     }
 }
