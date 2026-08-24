@@ -57,7 +57,7 @@ fn insert(storage: &mut HashMap<String, String>, key: String, value: String) -> 
 }
 
 fn delete_entry_by_key(storage: &mut HashMap<String, String>, key: String) -> Option<String> {
-    storage.remove(&(key))
+    storage.remove(&key)
 }
 
 fn get_value(storage: &HashMap<String, String>, key: String) -> Option<&String> {
@@ -127,7 +127,7 @@ mod tests {
     fn test_get_missing_key() {
         let mut storage = HashMap::new();
         insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
-        let result = get_value(&mut storage, String::from("toys"));
+        let result = get_value(&storage, String::from("toys"));
 
         assert_eq!(result, None);
     }
@@ -142,6 +142,7 @@ mod tests {
     }
 
     #[test]
+
     fn test_insert_overwrites_existing_key() {
         let mut storage = HashMap::new();
         let old = insert(&mut storage, String::from("cheese_type"), String::from("blue cheese"));
