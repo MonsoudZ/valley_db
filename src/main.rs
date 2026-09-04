@@ -1,8 +1,20 @@
 use std::collections::HashMap;
 use std::io;
+use std::fs::File;
+use std::io::{Write};
 
 fn main() {
     let mut mapping = HashMap::new();
+
+    match write_to_file()  {
+        Ok(()) => {
+            println!("Successfully wrote to file");
+        }
+        Err(error) => {
+            println!("Failed to write to file: {}", error);
+        }
+    }
+
 
     loop {
         println!("Input your desired function");
@@ -95,6 +107,13 @@ fn input_value() -> String {
         }
     }
 }
+
+fn write_to_file() -> std::io::Result<()> {
+        let mut file = File::create("valley.db")?;
+        file.write_all(b"Hello, world!")?;
+        Ok(())
+    }
+
 
 #[cfg(test)]
 mod tests {
